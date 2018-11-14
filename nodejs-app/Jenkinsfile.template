@@ -6,8 +6,9 @@ pipeline {
   }
   stages {
     stage('Test') {
-     agent { label 'nodejs-app' }
-     steps {
+      agent { label 'nodejs-app' }
+      steps {
+        checkout scm
         container('nodejs') {
           echo 'Hello World!'   
           sh 'node --version'
@@ -32,7 +33,7 @@ pipeline {
         timeout(time: 30, unit: 'SECONDS') 
       }
       post {
-         aborted {
+         success {
          echo "Why didn't you push my button?"
          }
       }
