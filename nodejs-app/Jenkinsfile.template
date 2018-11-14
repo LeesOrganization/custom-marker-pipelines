@@ -31,9 +31,10 @@ pipeline {
         timeout(time: 30, unit: 'SECONDS') 
       }
       input {
-        message "Should we continue?"
-      }
-      steps {
+        message "Should we deploy?"
+        submitter "meaganfischer"
+        submitterParameter "APPROVER"
+      }      steps {
         echo "Continuing with deployment"
       }
     }
