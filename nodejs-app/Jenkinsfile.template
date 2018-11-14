@@ -13,7 +13,7 @@ pipeline {
         }
       }
     }
-     stage('Build and Push Image') {
+    stage('Build and Push Image') {
       when {
          beforeAgent true
          branch 'master'
@@ -22,7 +22,7 @@ pipeline {
          echo "TODO - build and push image"
       }
     }
-        stage('Deploy') {
+    stage('Deploy') {
       when {
         beforeAgent true
         branch 'master'
@@ -30,11 +30,17 @@ pipeline {
       options {
         timeout(time: 30, unit: 'SECONDS') 
       }
-      input {
+      post {
+         aborted {
+         echo "Why didn't you push my button?"
+         }
+      }
+    input {
         message "Should we deploy?"
         submitter "meaganfischer"
         submitterParameter "APPROVER"
-      }      steps {
+      }
+      steps {
         echo "Continuing with deployment"
         echo "Continuing with deployment - approved by ${APPROVER}"
       }
