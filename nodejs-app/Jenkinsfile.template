@@ -6,6 +6,7 @@ pipeline {
        label 'nodejs-testcafe'
        yaml testPodYaml
     }
+  }
   options { 
     buildDiscarder(logRotator(numToKeepStr: '2'))
     skipDefaultCheckout true
