@@ -1,4 +1,5 @@
 library 'cd-accel'
+def loadTestPodYaml = libraryResource 'podtemplates/nodejs-app/load-test-pod.yml'
 def testPodYaml = libraryResource 'podtemplates/nodejs-app/web-test-pod.yml'
 pipeline {
   agent {
@@ -37,6 +38,28 @@ pipeline {
         }
       }
     }
+        stage('Load Test') {  
+      agent {
+        kubernetes {
+          label 'nodejs-ab'
+          yaml loadTestPodYaml
+        }
+      }
+      steps {
+        checkout scm
+        container('nodejs') {
+          sh '''
+            npm install express
+            npm install pug --save
+            node ./hello.js &
+          '''
+        }
+        container('apache-benchmark') {
+          sh 'ab -n 10 -c 4 -s 5 http://localhost:8080/'
+        }
+      }
+    }  
+
     stage('Build and Push Image') {
       agent any
       when {
